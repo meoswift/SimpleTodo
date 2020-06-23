@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     Button button_add;
     EditText item_input;
     RecyclerView items_rv;
+    ItemsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
         items = new ArrayList<>();
 
-        final ItemsAdapter adapter = new ItemsAdapter(items);
+        // Set up the Adapter from model to RecylcerView
+        ItemsAdapter.OnLongClickListener longClickListener = new ItemsAdapter.OnLongClickListener()
+        {
+            @Override
+            public void onItemLongClicked(int position) {
+                 // Delete item from the model and notify the adapter
+                items.remove(position);
+                adapter.notifyItemRemoved(position);
+                Toast.makeText(MainActivity.this, "Item was removed", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        adapter = new ItemsAdapter(items, longClickListener);
         items_rv.setAdapter(adapter);
         items_rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -46,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                 // Notify the adapter that an item has been added
                 adapter.notifyItemInserted(items.size() - 1);
                 item_input.setText("");
+
+                // Pop-up message that tells user that an item has been successfully added
+                Toast.makeText(MainActivity.this, "Item was added", Toast.LENGTH_SHORT).show();
             }
         });
     }
