@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,13 +31,23 @@ public class MainActivity extends AppCompatActivity {
 
         items = new ArrayList<>();
 
-        items.add("buy milk");
-        items.add("do homework");
-
-        ItemsAdapter adapter = new ItemsAdapter(items);
+        final ItemsAdapter adapter = new ItemsAdapter(items);
         items_rv.setAdapter(adapter);
         items_rv.setLayoutManager(new LinearLayoutManager(this));
-    }
 
+        button_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String todo_item = item_input.getText().toString();
+
+                // Add item to the model
+                items.add(todo_item);
+
+                // Notify the adapter that an item has been added
+                adapter.notifyItemInserted(items.size() - 1);
+                item_input.setText("");
+            }
+        });
+    }
 
 }
