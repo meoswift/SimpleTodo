@@ -1,9 +1,11 @@
 package com.example.simpletodo;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import org.apache.commons.io.FileUtils;
 
@@ -20,6 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String KEY_ITEM_TEXT = "item_text";
+    public static final String KEY_ITEM_POSITION = "item_pos";
+    public static final int EDIT_TEXT_CODE = 1234;
 
     List<String> items;
 
@@ -40,6 +46,22 @@ public class MainActivity extends AppCompatActivity {
         // Load items from data file to maintain persistence
         readItems();
 
+        ItemsAdapter.OnClickListener clickListener = new ItemsAdapter.OnClickListener() {
+            @Override
+            public void onItemClicked(int position) {
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                String clicked_item = items.get(position);
+
+                // pass data to EditActivity
+                intent.putExtra(KEY_ITEM_TEXT, clicked_item);
+                intent.putExtra(KEY_ITEM_POSITION, position);
+
+                // start EditActivity that gets back the edited item to update list
+                startActivityForResult(intent, EDIT_TEXT_CODE);
+            }
+        };
+
+
         // Set up the Adapter from model to RecyclerView
         ItemsAdapter.OnLongClickListener longClickListener = new ItemsAdapter.OnLongClickListener()
         {
@@ -57,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // Set up the adapter with the override function and list of items
-        adapter = new ItemsAdapter(items, longClickListener);
+        adapter = new ItemsAdapter(items, longClickListener, clickListener);
         items_rv.setAdapter(adapter);
         items_rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -81,6 +103,26 @@ public class MainActivity extends AppCompatActivity {
                 writeItems();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_TEXT_CODE && resultCode == RESULT_OK) {
+            // retrieve data that was passed from EditActivity
+            int position = data.getExtras().getInt(KEY_ITEM_POSITION);
+            String new_item = data.getStringExtra(KEY_ITEM_TEXT);
+            // update the model with edited item
+            items.set(position, new_item);
+            // notify adapter of changes
+            adapter.notifyDataSetChanged();
+            // save to file to persist the changes
+            writeItems();
+
+            Toast.makeText(MainActivity.this, "Item was updated successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.w("MainActivity", "Unknown call to onActivityResult");
+        }
     }
 
     // Get the file we want to read and write from
