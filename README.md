@@ -20,7 +20,7 @@ The following **stretch** features are implemented:
 
 The following **additional** features are implemented:
 
-* [x] Added some changes to UI to make it friendlier to user
+* [x] Added some changes to UI to make app more user-friendly.
 
 ## Video Walkthrough
 
