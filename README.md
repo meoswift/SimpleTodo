@@ -32,7 +32,9 @@ GIF created with [Kap].
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+* RecyclerView was tricky to understand and complicated to implement. However, I was able to understand what each method does and how the ItemsAdapter class communicate with MainActivity.
+* The most challenging part was implementing LongClickListner. I had to read over the code twice to understand why we need to create an interface and how this interface communicates between MainActivity and ItemsAdapter. 
+* Activity LifeCycle took me a bit of time to fully process. However, lifecycles helped me understand why we need to read and save data to file in order to keep the list persistent. 
 
 ## License
 
