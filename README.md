@@ -26,7 +26,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/ye0fbxu.gif' title='Video Walkthrough' width='200px' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/hooZyqF.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [Kap].
 
@@ -36,7 +36,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [2020] [Linh Tran]
+    Copyright 2020 Linh Tran
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
